@@ -140,6 +140,12 @@ class User < ActiveRecord::Base
   has_many :log_items, :dependent => :destroy
   validates_associated :log_items
 
+  belongs_to :support_identity
+  def support_identity_with_create
+    support_identity_without_create || SupportIdentity.create(:name => self.login, :user => self)
+  end
+  alias_method_chain :support_identity, :create
+
   before_destroy :remove_pseud_from_kudos
   def remove_pseud_from_kudos
     Kudo.update_all("pseud_id = NULL", "pseud_id IN (#{self.pseuds.collect(&:id).join(',')})")
@@ -187,7 +193,7 @@ class User < ActiveRecord::Base
   end
 
 
-  def self.for_claims(claims_ids)    
+  def self.for_claims(claims_ids)
     joins(:request_claims).
     where("challenge_claims.id IN (?)", claims_ids)
   end
@@ -349,6 +355,40 @@ class User < ActiveRecord::Base
   def archivist=(should_be_archivist)
     set_role('archivist', should_be_archivist == '1')
   end
+
+  # Is this user an authorized support staffer?
+  def support_staffer?
+    has_role?(:support_staffer)
+  end
+
+  # Set support staffer role for this user and log change
+  def support_staffer=(should_be_support_staffer)
+    case should_be_support_staffer
+    when "1"
+      set_role('support_staffer', true)
+      # set the support identity as official
+      self.support_identity.update_attribute(:official, true)
+    else
+      set_role('support_staffer', false)
+      # remove the official designation from the support identity
+      self.support_identity.update_attribute(:official, false)
+    end
+  end
+
+  # Is this user an authorized support admin?
+  def support_admin?
+    has_role?(:support_admin)
+  end
+
+  # Set support admin role for this user and log change
+  def support_admin=(should_be_support_admin)
+    set_role('support_admin', should_be_support_admin == '1')
+    # if adding as a support admin, add as a support staffer as well
+    # but don't remove the support staffer role if removing the admin role
+    # if you want to do that as well, it needs to be done in a separate step
+    self.support_staffer = '1' if (should_be_support_admin == '1' && !self.support_staffer?)
+  end
+
 
   # Creates log item tracking changes to user
   def create_log_item(options = {})

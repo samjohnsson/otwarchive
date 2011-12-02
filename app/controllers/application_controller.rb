@@ -142,7 +142,7 @@ public
       redirect_to root_path
     end
   end
-  
+
   # Hide admin banner via cookies
   before_filter :hide_banner
   def hide_banner
@@ -175,7 +175,7 @@ public
     flash[:error] = ts("Sorry, you're not allowed to do that.")
     redirect_to (fallback || root_path) rescue redirect_to '/'
   end
-  
+
 
   @over_anon_threshold = true if @over_anon_threshold.nil?
 
@@ -294,12 +294,17 @@ public
     elsif @check_visibility_of.is_a? Skin
       access_denied unless logged_in_as_admin? || current_user_owns?(@check_visibility_of) || @check_visibility_of.official?
     else
-      is_hidden = (@check_visibility_of.respond_to?(:visible) && !@check_visibility_of.visible) || 
-                  (@check_visibility_of.respond_to?(:visible?) && !@check_visibility_of.visible?) || 
+      is_hidden = (@check_visibility_of.respond_to?(:visible) && !@check_visibility_of.visible) ||
+                  (@check_visibility_of.respond_to?(:visible?) && !@check_visibility_of.visible?) ||
                   (@check_visibility_of.respond_to?(:hidden_by_admin?) && @check_visibility_of.hidden_by_admin?)
       can_view_hidden = logged_in_as_admin? || current_user_owns?(@check_visibility_of)
       access_denied if (is_hidden && !can_view_hidden)
     end
+  end
+
+  # Filter method - support admin permission
+  def support_admin_only
+     logged_in_as_admin? || permit?("support_admin") || access_denied
   end
 
   # Make sure user is allowed to access tag wrangling pages

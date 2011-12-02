@@ -70,6 +70,9 @@ gem 'best_in_place'
 
 gem 'timeliness'
 
+# for state machines
+gem "workflow"
+
 group :test do
   gem 'rspec-rails', '>=2.5.0'
   gem 'pickle'

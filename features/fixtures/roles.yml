@@ -10,3 +10,9 @@ translation_admin:
 archivist:
   id: 4
   name: archivist
+support:
+  id: 5
+  name: support_staffer
+support_admin:
+  id: 6
+  name: support_admin

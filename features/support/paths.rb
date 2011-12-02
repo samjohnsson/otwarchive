@@ -64,7 +64,7 @@ module NavigationHelpers
     when /my bookmarks page/
       user_bookmarks_path(User.current_user)
     when /my subscriptions page/
-      user_subscriptions_path(User.current_user)      
+      user_subscriptions_path(User.current_user)
     when /my profile page/
       user_profile_path(User.current_user)
     when /my claims page/
@@ -104,7 +104,7 @@ module NavigationHelpers
     when /^the admin-posts page$/i
       admin_posts_path
     when /^the admin-settings page$/i
-      admin_settings_path      
+      admin_settings_path
     when /^the admin-notices page$/i
       notify_admin_users_path
     when /^the FAQ reorder page$/i
@@ -114,10 +114,23 @@ module NavigationHelpers
     when /^the new tag ?set page$/i
       new_tag_set_path
     when /^the "(.*)" tag ?set edit page$/i
-      edit_tag_set_path(OwnedTagSet.find_by_title($1))    
+      edit_tag_set_path(OwnedTagSet.find_by_title($1))
     when /^the "(.*)" tag ?set page$/i
-      tag_set_path(OwnedTagSet.find_by_title($1))    
-      
+      tag_set_path(OwnedTagSet.find_by_title($1))
+    # support board paths
+    when /^the page for support ticket (\d+)/
+      support_ticket_path(:id => $1)
+    when /^the page for the last support ticket/
+      support_ticket_path(:id => SupportTicket.last.id)
+    when /^the page for code ticket (\d+)/
+      code_ticket_path(:id => $1)
+    when /^the page for the last code ticket/
+      code_ticket_path(:id => CodeTicket.last.id)
+    when /^the page for faq (\d+)/
+      faq_path(:id => $1)
+    when /^the page for the last faq/
+      faq_path(:id => Faq.last.id)
+
     # Here is an example that pulls values out of the Regexp:
     #
     #   when /^(.*)'s profile page$/i

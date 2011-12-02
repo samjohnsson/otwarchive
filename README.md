@@ -44,3 +44,13 @@ public
 db
   The overall archive database layout can be found in the file schema.rb.
 
+## Setup
+
+gem install thor
+thor setup:config # this isn't working yet, but will someday
+
+you will need to edit the resulting files for your needs
+
+To load some test data for the support board
+
+rails runner db/support_demo_seeds.rb

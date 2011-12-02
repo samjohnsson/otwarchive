@@ -3,7 +3,7 @@ require 'spec_helper'
 describe User do
 
   describe "save" do
-  
+
     before(:each) do
       @user = User.new
       @user.login = "myname"
@@ -12,7 +12,7 @@ describe User do
       @user.email = "foo1@archiveofourown.org"
       @user.password = "password"
     end
-    
+
     it "should save a minimalistic user" do
       @user.save.should be_true
     end
@@ -22,25 +22,25 @@ describe User do
       @user.save.should be_false
       @user.errors[:age_over_13].should_not be_empty
     end
-    
+
     it "should not save user without terms_of_service flag" do
       @user.terms_of_service = ""
       @user.save.should be_false
       @user.errors[:terms_of_service].should_not be_empty
     end
-    
+
     it "should encrypt password" do
       @user.save
       @user.crypted_password.should_not be_empty
       @user.crypted_password.should_not == @user.password
     end
-    
+
     it "should not save user with too short login" do
       @user.login = "a"
       @user.save.should be_false
       @user.errors[:login].should_not be_empty
     end
-    
+
     it "should not save user with too long login" do
       @user.login = "a" * 60
       @user.save.should be_false
@@ -69,12 +69,12 @@ describe User do
       @user.pseuds.first.name.should == @user.login
       @user.pseuds.first.is_default.should be_true
     end
-    
+
   end
 
 
   describe "most_popular_tags" do
-    
+
     before(:each) do
       @user = Factory.create(:user)
       @fandom1 = Factory.create(:fandom)
@@ -94,7 +94,7 @@ describe User do
       @user.most_popular_tags.should == [@fandom1]
       @user.most_popular_tags.first.taggings_count.should == 1
     end
-    
+
     it "should find two fandoms for one work" do
       Factory.create(:work,
                      { :authors => [@user.pseuds.first],
@@ -138,7 +138,7 @@ describe User do
                      { :authors => [@user.pseuds.first],
                        :fandoms => [@fandom1],
                        :characters => [@character]})
-      
+
       @user.most_popular_tags.should =~ [@fandom1, @character]
       @user.most_popular_tags.first.taggings_count.should == 1
       @user.most_popular_tags.last.taggings_count.should == 1
@@ -149,11 +149,11 @@ describe User do
                      { :authors => [@user.pseuds.first],
                        :fandoms => [@fandom1],
                        :characters => [@character]})
-      
+
       @user.most_popular_tags(:categories => ["Character"]).should == [@character]
     end
 
-  
+
     it "should limit length of returned collection" do
       Factory.create(:work,
                      { :authors => [@user.pseuds.first],
@@ -167,4 +167,33 @@ describe User do
     end
 
   end
+
+  describe "roles" do
+    context "a valid user" do
+      user = User.find_or_create_by_login("new_user")
+      user.email = "new_user@ao3.org"
+      user.password = "some paswword"
+      user.password_confirmation = "some paswword"
+      user.terms_of_service = "1"
+      user.age_over_13 = "1"
+      user.save!
+
+      it "can have a tag wrangler role" do
+        user.tag_wrangler = '1'
+
+        user.is_tag_wrangler?.should be_true
+      end
+      it "can have a support staffer role" do
+        user.support_staffer = '1'
+
+        user.support_staffer?.should be_true
+      end
+      it "can have a support admin role" do
+        user.support_admin = '1'
+
+        user.support_admin?.should be_true
+      end
+    end
+  end
+
 end

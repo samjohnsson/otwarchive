@@ -65,7 +65,7 @@ Otwarchive::Application.routes.draw do
     resources :comments
 	end
 
-  resources :tag_sets, :controller => 'owned_tag_sets' do 
+  resources :tag_sets, :controller => 'owned_tag_sets' do
     resources :nominations, :controller => 'tag_set_nominations' do
       collection do
         put :update_multiple
@@ -76,7 +76,7 @@ Otwarchive::Application.routes.draw do
       collection do
         put :update_multiple
       end
-    end      
+    end
     member do
       get :batch_load
       put :do_batch_load
@@ -133,6 +133,19 @@ Otwarchive::Application.routes.draw do
     end
   end
 
+  #### SUPPORT BOARD ####
+
+  resources :faqs
+  resources :release_notes
+  resources :support_tickets
+  resource :support_settings
+  resources :code_tickets
+  resources :code_commits
+
+  match 'support_board' => 'support_tickets#area'
+  match 'support_comments' => 'support_tickets#comments'
+
+  match 'github' => 'github#push', :via => "post"
 
   #### USERS ####
 
@@ -222,7 +235,7 @@ Otwarchive::Application.routes.draw do
     resources :signups, :controller => "challenge_signups", :only => [:index]
     resources :skins, :only => [:index]
     resources :subscriptions, :only => [:index, :create, :destroy]
-    resources :tag_sets, :controller => "owned_tag_sets", :only => [:index]    
+    resources :tag_sets, :controller => "owned_tag_sets", :only => [:index]
     resources :works do
       collection do
         get :drafts
