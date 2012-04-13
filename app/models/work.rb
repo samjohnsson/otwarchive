@@ -2,6 +2,7 @@ class Work < ActiveRecord::Base
 
   include Taggable
   include Collectible
+  include Pseudable
 
   ########################################################################
   # ASSOCIATIONS
@@ -229,6 +230,34 @@ class Work < ActiveRecord::Base
   # AUTHORSHIP
   ########################################################################
 
+  # NOTE:
+  # pseuds_to_add/remove can only be used after a work exists 
+  def pseuds_to_add=(pseud_names)
+    pseud_names.split(',').reject {|name| name.blank?}.map {|name| name.strip}.each do |name|
+      possible_pseuds = Pseud.parse_byline(name)
+      if possible_pseuds.size > 1
+        possible_pseuds = Pseud.parse_byline(name, :assume_matching_login => true)
+      end
+      p = possible_pseuds.first
+      errors.add(:base, ts("We couldn't find the pseud {{name}}.", :name => name)) and return if p.nil?
+      self.pseuds << p unless self.pseuds.include?(p)
+    end
+  end
+  
+  def pseuds_to_remove=(pseud_ids)
+    pseud_ids.reject {|id| id.blank?}.map {|id| id.strip}.each do |id|
+      p = Pseud.find(id)
+      if p && self.pseuds.include?(p)
+        # don't remove all authors from a work
+        if (self.pseuds - [p]).size > 0
+          self.pseuds -= [p]
+        end
+      end
+    end
+  end
+  
+  def pseuds_to_add; nil; end
+  def pseuds_to_remove; nil; end
 
   # Virtual attribute for pseuds
   def author_attributes=(attributes)
@@ -341,6 +370,12 @@ class Work < ActiveRecord::Base
     self.visible(user) == self
   end
 
+  def unrestricted=(setting)
+    if setting == "1"
+      self.restricted = false
+    end
+  end
+  def unrestricted; !self.restricted; end
 
   def unrevealed?(user=User.current_user)
     # eventually here is where we check if it's in a challenge that hasn't been made public yet
@@ -378,7 +413,7 @@ class Work < ActiveRecord::Base
       # do is update with current time
       if recent_date == Date.today && self.revised_at && self.revised_at.to_date == Date.today
         return self.revised_at
-      elsif recent_date == Date.today && self.revised_at && self.revised_at.to_date != Date.today
+      elsif recent_date == Date.today && self.revised_at && self.revised_at.to_date != Date.today || recent_date.nil?
         self.revised_at = Time.now
       else
         self.revised_at = DateTime::jd(recent_date.jd, 12, 0, 0)
@@ -497,12 +532,17 @@ class Work < ActiveRecord::Base
 
   # Gets the current first chapter
   def first_chapter
-    self.chapters.find(:first, :order => 'position ASC') || self.chapters.first
+    self.chapters.order('position ASC').first || self.chapters.first
   end
 
   # Gets the current last chapter
   def last_chapter
-    self.chapters.find(:first, :order => 'position DESC')
+    self.chapters.order('position DESC').first
+  end
+  
+  # Gets the current last posted chapter
+  def last_posted_chapter
+    self.chapters.posted.order('position DESC').first
   end
 
   # Returns true if a work has or will have more than one chapter
@@ -736,21 +776,27 @@ class Work < ActiveRecord::Base
 
   # Gets all comments for all chapters in the work
   def find_all_comments
-    self.chapters.collect { |c| c.find_all_comments }.flatten
+    Comment.where(
+      :parent_type => 'Chapter', 
+      :parent_id => self.chapters.value_of(:id)
+    )
   end
 
   # Returns number of comments
-  # Hidden and deleted comments are referenced in the view because of the threading system - we don't necessarily need to
+  # Hidden and deleted comments are referenced in the view because of 
+  # the threading system - we don't necessarily need to
   # hide their existence from other users
   def count_all_comments
-    self.chapters.collect { |c| c.count_all_comments }.sum
+    find_all_comments.count
   end
 
   # returns the top-level comments for all chapters in the work
   def comments
-    self.chapters.collect { |c| c.comments }.flatten
+    Comment.where(
+      :commentable_type => 'Chapter', 
+      :commentable_id => self.chapters.value_of(:id)
+    )
   end
-
 
   ########################################################################
   # RELATED WORKS
