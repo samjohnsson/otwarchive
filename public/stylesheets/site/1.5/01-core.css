@@ -1,0 +1,258 @@
+/* SKIN: One Point Faux */
+/* DESCRIPTION: Spoofs the old style on top of the new style. */
+/* revisions 05-03-2012 */
+/*colour*/
+#outer {
+  background: #fffef9;
+  color: #111;
+}
+
+
+/*regions*/
+/*header */
+#header {
+  font-size: 100%;
+  min-height: 0;
+  padding-top: 1em;
+  position: relative;
+  background: url("/images/legacy/header-red.png") bottom left;
+  box-shadow: 0 4px 8px;
+  border-bottom: 5px solid #000;
+}
+
+#login .navigation,
+#header li.search {
+  text-align: right;
+  float: right;
+}
+
+#header ul.primary {
+  margin: auto;
+  text-align: left;
+  background: none;
+  box-shadow: none;
+  padding: 0 0 0 0.2em;
+}
+
+#header ul.primary li {
+  margin: 0;
+  padding: 0;
+}
+
+#header ul.primary a {
+  background: #fff url("/images/legacy/fffef9-ccc.png") bottom left repeat-x;
+}
+
+#header ul.primary a:hover {
+  background: #ddd;
+  color: #000;
+}
+
+#header ul.primary a,
+#header ul.primary .current {
+  border: 2px solid #000;
+  margin: -0.2em;
+  padding: 0.5em;
+}
+
+#header img {
+  display: none;
+}
+
+#header h1 {
+  position: static;
+  margin-right: 5em;
+}
+
+#header h1 span.landmark,
+#header #greeting .landmark {
+  height: auto;
+  width: auto;
+  display: inline;
+  font-size: 100%;
+  color: #fff;
+  opacity: 1;
+  line-height: 1;
+}
+
+#header h1 span.landmark {
+  font-size: 87.5%;
+}
+
+#header #greeting .landmark a {
+  font-size: 1em;
+  opacity: 1;
+}
+
+#outer #header #greeting {
+  right: 0;
+  margin: 1em;
+  position: absolute;
+  width: auto;
+  overflow: hidden;
+}
+
+#greeting p.icon {
+  text-align: left;
+  float: right;
+  margin-bottom: 0.965em;
+  border: 0;
+  height: auto;
+  width: auto;
+}
+
+#greeting ul {
+  margin-top: -0.643em;
+}
+
+#greeting a {
+  border: 0;
+  background: none;
+  color: #fff;
+}
+
+#greeting ul li:after {
+  color: #fff;
+  content: " |";
+}
+
+#header #login {
+  position: static;
+}
+
+#login .navigation {
+  clear: both;
+}
+
+/*dash*/
+#dashboard,
+#dashboard.own {
+  border: 3px solid #000;
+  padding: 0;
+}
+
+#dashboard ul {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+
+/*footer*/
+#footer,
+#outer #footer li a {
+  background: none;
+  color: #000;
+}
+
+#footer p.beta {
+  background: none;
+}
+
+#footer {
+  border-top: 1px solid #ddd;
+}
+
+
+/*forms and groups*/
+fieldset,
+fieldset fieldset,
+.verbose legend,
+#inner form dt,
+.listbox,
+.listbox .group.index,
+li.blurb,
+li.comment {
+  border: 0;
+  box-shadow: none;
+}
+
+.listbox .group.index, li.blurb, li.comment { 
+  background: #fffef9; 
+} 
+
+form .meta,
+.filters fieldset,
+dl.stats {
+  background: #ddd;
+}
+
+#outer .search input {
+  border-radius: 0;
+}
+
+
+/*actions*/
+#inner #main ul.navigation,
+#inner #main .actions,
+#inner #main .submit {
+  border-radius: 2em;
+  border: 1px solid #ccc;
+  background: #fffef9 url("/images/legacy/fffef9-ccc.png") bottom left repeat-x;
+  float: right;
+  margin: 0;
+  padding: 0 0.5em;
+}
+
+#inner #main ul.navigation a,
+#inner #main .actions a,
+#inner #main .submit input,
+#inner #main .actions input,
+button {
+  border: 0;
+  background: none;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+}
+
+#outer .current {
+  background: #000 !important;
+  color: #fff;
+}
+
+#outer .actions a,
+#outer .current {
+  border-radius: 0;
+}
+
+
+/* target to dim the Bookmark User button until feature is deployed */
+.user a[title="Coming soon"] {
+  color: #CCC;
+}
+
+
+/*types and groups*/
+.preface h2.title {
+  font-variant: normal;
+}
+
+#inner .stats dd {
+  padding-left: 0;
+  border: 0;
+}
+
+#inner .stats dt {
+  padding: 0;
+}
+
+#inner .stats {
+  background: #eee;
+  margin: 0.643em 0;
+}
+
+
+/* contexts */
+#inner #main.works-index .actions.module {
+  border: 0;
+  background: none !important;
+}
+
+#home .intro p.actions {
+  width: auto;
+}
+
+#user-fandoms {
+  border: 0;
+  width: 100%;
+}
