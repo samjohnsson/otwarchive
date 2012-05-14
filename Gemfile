@@ -70,13 +70,8 @@ gem 'best_in_place'
 
 gem 'timeliness'
 
-<<<<<<< HEAD
-# for state machines
-gem "workflow"
-=======
 # for generating graphs
 gem "google_visualr", ">= 2.1"
->>>>>>> c83d697790d9858ede9ae15aab536e6b2bd7eea1
 
 group :test do
   gem 'rspec-rails', '>=2.5.0'
