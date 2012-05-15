@@ -4,28 +4,26 @@
 
 <h4 class="landmark navigation"><%= ts("Reference Links") %></h4>
   <ul class="actions" role="menu">
-		<li><%= link_to ts("FAQ section"), archive_faqs_path %></li>
+		<li><%= link_to ts("FAQ Index"), archive_faqs_path %></li>
 		<li><%= link_to ts("Tutorials"), admin_posts_path(:tag => 5) %></li>
 		<li><%= link_to ts("Known Issues"), known_issues_path %></li>
 	</ul>
 
 <h3 class="landmark heading"><%= ts("Feedback Greeting") %></h3>
-<h3 class="heading"><%= ts("We love to hear from our users! Tell us about your experience using our site!") %></h3>
+<h3 class="heading"><%= ts("We love to hear from our users! Tell us about your experience - good, bad, or broken - using our site!") %></h3>
 
-<p><%= ts("We're still in our beta phase of development, so there are") %> <a href="http://code.google.com/p/otwarchive/issues/list"> <%= ts(" lots of bugs to be fixed ") %> </a> <%= ts("and ") %> <a href="https://trello.com/board/feature-requests/4f0cd935f97f91cf29246288"> <%= ts("new features to be considered") %> </a> <%= ts(". For live updates on Archive performance, please check out our Twitter feed:") %> <a href="http://twitter.com/ao3_status"><img src="http://twitter.com/favicon.ico" alt="[twitter.com profile] " style="border: 0; padding-right: 1px;" width="16" height="16" />@AO3_status</a> <%= ts(". Please use this form to let us know about your experience while using the site - good and bad! This form is for questions about the Archive and the OTW. Questions for authors should be relayed on their works.") %>
+<p><%= ts("We're still in our beta phase of development, so there are ") %> <a href="http://code.google.com/p/otwarchive/issues/list"> <%= ts("lots of bugs to be fixed") %> </a> <%= ts(" and ") %> <a href="https://trello.com/board/feature-requests/4f0cd935f97f91cf29246288"> <%= ts("new features to be considered") %></a><%= ts(". For live updates on Archive performance, please check out our Twitter feed:") %> <a href="http://twitter.com/ao3_status">@AO3_status</a> <%= ts(". Please use this form to let us know about your experience while using the site - good and bad! This form is for questions about the Archive and the OTW. Questions for authors should be relayed on their works.") %>
 
 <%= form_for(@feedback, :html => {:class => "post feedback"}) do |f| %>
   <fieldset class="support meta" role="contacts">
   <legend><%= ts("Contact Information") %></legend>
     <dl>
-      <dt><%= ts("Why do we ask for this?") %></dt>
-      <dd><%= ts("We value anonymous feedback, but if you'd like a reply to your question or comment, we need your email address to contact you. Our spam filter does collect IP addresses, but we never see them.") %></dd>
+      <dt><%= ts("Why do we ask for contact information?") %></dt>
+      <dd><%= ts("We value anonymous feedback, but if you'd like a personal reply to your question or comment, we need your email address to contact you. Our spam filter does collect IP addresses, but we never see them.") %></dd>
 	
       <dt><%= f.label :email, ts("Your email (optional)") %>:</dt>
       <dd><%= f.text_field :email, :size => 60 %></dd>
 
-      <dt><%= f.label :current_user.login, ts("Your AO3 username (optional)") %>:</dt>
-      <dd><%= f.text_field :current_user.login, :size => 40 %></dd>     
 
     </dl>
   </fieldset>
