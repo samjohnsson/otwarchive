@@ -100,7 +100,7 @@ class Sanitize
         then "criticalcommons"
       when /^http:\/\/(?:www\.)?google\.com\//
         then "google"
-      when /^http:\/\/(?:www\.)?spotify\.com\//
+      when /^https:\/\/(?:www\.)?spotify\.com\//
         then "spotify"
       when /^http:\/\/(?:www\.)?8tracks\.com\//
         then "8tracks"
